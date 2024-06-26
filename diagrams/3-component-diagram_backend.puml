@@ -1,0 +1,31 @@
+@startuml FoodMenuSystemContextDiagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/postgresql.puml
+!include DEVICONS/java.puml
+
+
+title Context Diagram for Food Menu System
+
+
+SHOW_PERSON_PORTRAIT()
+LAYOUT_LEFT_RIGHT()
+
+Person(user, "User", "Pearson who access the menu portal")
+Container(frontend, "Food menu portal", "React, typescript",  "Web interface to list food menu", $sprite = "react")
+System_Boundary(api_app, "Food Menu API", "System that provides the menu and allows the user to interact with it."){
+    Container(foodController, "FoodController", "Component: Spring Rest Controller",  "Provide a basic Food Itens operations (create, update, list)", $sprite = "java")
+    Container(foodRepository, "FoodRepository", "Component: JpaRepository",  "Provide a connection and basic operations on Database", $sprite = "java")
+
+    Rel(foodController, foodRepository, "Use", "JPA")
+}
+
+Rel(frontend, foodController, "Use", "HTTP")
+Rel(user, foodController, "Use", "HTTP")
+
+ContainerDb(db, "Database", "PostgresSQL", "Store food menu itens.", $sprite="postgresql")
+
+Rel(foodRepository, db, "Read and wirte using", "PostgreSQL protocol")
+
+SHOW_LEGEND()
+@enduml

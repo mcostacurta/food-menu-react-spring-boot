@@ -1,0 +1,10 @@
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+ENV SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/food
+ENV SPRING_DATASOURCE_USERNAME=postgres
+ENV SPRING_DATASOURCE_PASSWORD=postgres
+
+EXPOSE 8080
+CMD tail -f /dev/null

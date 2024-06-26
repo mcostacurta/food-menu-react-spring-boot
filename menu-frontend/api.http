@@ -1,0 +1,15 @@
+GET http://172.27.0.3:8080/food
+
+### GET by id
+GET http://localhost:8080/food/1
+
+### POST
+POST http://localhost:8080/food
+Content-Type: application/json
+
+
+{
+    "title": "",
+    "price": 25,
+    "image": "https://www.foodrepublic.com/img/gallery/what-is-temaki-and-how-do-you-eat-it/intro-1687342613.webp"
+}

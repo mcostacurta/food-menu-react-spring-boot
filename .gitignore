@@ -1,0 +1,10 @@
+*
+!.gitignore
+!docker-compose.yml
+!README.md
+!diagrams/
+!diagrams/**/*
+!menu-api/
+!menu-api/**/*
+!menu-frontend/
+!menu-frontend/**/*

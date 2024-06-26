@@ -1,0 +1,47 @@
+@startuml
+  !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+WithoutPropertyHeader()
+
+title Deployment Diagram for Food Menu System - Docker
+
+Deployment_Node(plc, "Docker environment", "Docker containers", "Docker container runtime environment."){
+    AddProperty("Location", "host machine")
+    Deployment_Node_L(menu-api, "menu-api", "Docker image: openjdk:17-jdk-slim", "A web server container to host Java/SpringBoot api."){
+        AddProperty("Java Version", "17")
+        AddProperty("Xmx", "default")
+        AddProperty("Xms", "default")
+        Deployment_Node_L(backend, "SpringBoot", "SpringBoot", "A SpringBoot server to host the RESTful API."){
+            Container(api, "API Application", "Java and SpringBoot", "Provides Food Menu functionality via a JSON/HTTP API.")
+        }
+    }
+    AddProperty("Location", "host machine")
+    Deployment_Node_L(menu-database, "menu-database", "Docker image: postgres:13-alpine", "The postgresql database server."){
+        Deployment_Node_L(postgres, "PostgreSQL", "PostgreSQL 13", "The database server."){
+            ContainerDb(db, "Database", "Relational Database Schema", "Stores food menu itens.")
+        }
+    }
+    AddProperty("Location", "host machine")
+    Deployment_Node_R(menu-pgadmin, "menu-pgadmin", "Docker image: dpage/pgadmin4", "The database web admin") {
+        Deployment_Node_R(pgadmin, "PgAdmin", "PgAdmin 4", "A UI to manage database.") {
+            Container(dbadmin, "Web POrtal", "PgAdmin web portal", "Used to manage database")
+        }
+    }
+    AddProperty("Location", "host machine")
+    Deployment_Node_R(menu-frontend, "menu-frontend", "Docker image: node:21-slim", "The frontend web server") {
+        Deployment_Node_R(react-app, "React", "React 18.3.1", "A web server to host the React application.") {
+            Container(front, "Web Portal", "React web portal", "Provides all of the Food Menu functionality to customers via their web browser.")
+        }
+    }
+}
+
+Deployment_Node(comp, "Customer's computer", "Computer"){
+    Deployment_Node(browser, "Web Browser", "Google Chrome, Mozilla Firefox, Apple Safari or Microsoft Edge"){
+        Container(frontend, "React Application", "React", "Provides all of the Food Menu functionality to customers via their web browser.")
+    }
+}
+
+Rel(frontend, front, "Makes HTTP requests to", "HTTP")
+Rel(front, api, "Makes API calls to", "json/HTTP")
+Rel(api, db, "Reads from and writes to", "PostgreSQL prtocol")
+Rel(dbadmin, db, "Manages", "HTTP")
+@enduml

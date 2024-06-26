@@ -1,0 +1,36 @@
+@startuml FoodMenuSystemContextDiagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/postgresql.puml
+!include DEVICONS/react.puml
+!include DEVICONS/java.puml
+
+
+title Context Diagram for Food Menu System
+
+
+SHOW_PERSON_PORTRAIT()
+LAYOUT_LEFT_RIGHT()
+
+AddRelTag("async", $lineStyle = DashedLine())
+Person(user, "User", "Pearson who access the menu portal")
+Person(system, "System", "External potential clients that access the menu API")
+
+System_Boundary(menu_app, "Food Menu System", "System that provides the menu and allows the user to interact with it."){
+    Container(frontend, "Food menu portal", "React, typescript",  "Web interface to list food menu", $sprite = "react")
+    ContainerDb(db, "Database", "PostgresSQL", "Store food menu itens.", $sprite="postgresql")
+    Container(backend_api, "Expose API's", "SpringBoot", "Expose APIs to manipulate menu itens", $sprite="java")
+    Container(dbAdmin, "Web interface to access databse", "pgAdmin", "Web interface to easily access the database", $sprite="postgresql")
+    
+    Rel(backend_api, db, "Read and wirte using", "PostgreSQL protocol")
+    Rel(dbAdmin, db, "Read and Write", "PostgreSQL protocol")
+    Rel_L(frontend, backend_api, "Read and Write", "PostgreSQL protocol")
+
+    Rel(user, frontend, "View food menu itens, add a new one using", "HTTP")
+    Rel(system, backend_api, "View food menu itens, add a new one using", "HTTP")
+    Rel(system, dbAdmin, "Manipulate database using", "HTTP")
+
+}
+
+SHOW_LEGEND()
+@enduml

@@ -1,0 +1,4 @@
+version: '3.9'
+include:
+  - menu-api/docker-compose.yml
+  - menu-frontend/docker-compose.yml

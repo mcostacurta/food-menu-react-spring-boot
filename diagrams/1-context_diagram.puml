@@ -1,0 +1,28 @@
+@startuml FoodMenuSystemContextDiagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/postgresql.puml
+!include DEVICONS/react.puml
+!include DEVICONS/java.puml
+
+
+title Context Diagram for Food Menu System
+
+
+SHOW_PERSON_PORTRAIT()
+LAYOUT_LEFT_RIGHT()
+
+Person(user, "User", "Pearson or system")
+
+Container(frontend, "Web Portal", "UI interface",  "Web interface to list food menu", $sprite = "react")
+Container(backend_api, "Backend API's", "API", "Expose APIs to manipulate menu itens", $sprite="java")
+Container(dbAdmin, "Database Admin UI", "admin ui", "Web interface to easily access the database", $sprite="postgresql")
+
+Rel_L(frontend, backend_api, "Read and Write", "PostgreSQL protocol")
+
+Rel_R(user, frontend, "View food menu itens, add a new one using", "HTTP")
+Rel(user, backend_api, "View food menu itens, add a new one using", "HTTP")
+Rel(user, dbAdmin, "Manipulate database using", "HTTP")
+
+SHOW_LEGEND()
+@enduml

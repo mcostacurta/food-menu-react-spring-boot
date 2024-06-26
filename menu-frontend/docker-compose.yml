@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  front-app:
+    build: .
+    container_name: menu-frontend
+    # user: "${UID}:${GID}"
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app

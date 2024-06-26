@@ -1,0 +1,39 @@
+@startuml FoodMenuSystemContextDiagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/react.puml
+
+
+title Context Diagram for Food Menu System
+
+
+SHOW_PERSON_PORTRAIT()
+LAYOUT_LEFT_RIGHT()
+
+Person(user, "User", "Pearson who access the menu portal")
+System_Boundary(frontend, "Food Menu Frontend", "Web interface to list food menu"){
+    Container(app, "App.tsx", "Component: React",  "Main react component", $sprite = "react")
+
+    System_Boundary(hooks, "hooks", "typescript code to handle the state of the app"){
+        Container(useFoodData, "useFoodData.ts", "Hook: React and @tanstack/react-query",  "Hook to fetch data from the backend", $sprite = "react")
+        Container(useFoodDataMutate, "useFoodDataMutate.ts", "Hook: React and @tanstack/react-query",  "Hook to handle post data", $sprite = "react")
+    }
+
+    System_Boundary(components, "components", "Components react to render the app"){
+        Container(card, "Card.tsx", "Component: React",  "Component to render the food menu card", $sprite = "react")
+        Container(modal, "create-modal.tsx", "Component: React",  "Component to render the modal form to add a new food menu item", $sprite = "react")
+    }
+}
+
+Container(backend_api, "Expose API's", "SpringBoot", "Expose APIs to manipulate menu itens", $sprite="java")
+
+Rel(user, app, "View food menu itens, add a new one using", "HTTP")
+Rel(app, useFoodData, "Fetch data using", "HTTP")
+Rel(app, card, "Render card using", "HTTP")
+Rel(app, modal, "Render modal using", "HTTP")
+Rel(modal, useFoodDataMutate, "Post data using", "HTTP")
+Rel(useFoodData, backend_api, "Fetch data using", "HTTP")
+Rel(useFoodDataMutate, backend_api, "Post data using", "HTTP")
+
+SHOW_LEGEND()
+@enduml
